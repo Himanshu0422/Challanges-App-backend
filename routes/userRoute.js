@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const authMiddleware = require('../middlewares/authMiddleware');
 const { User, schema } = require('../models/userModel');
 
 router.post('/register', async (req, res) => {
@@ -17,7 +18,7 @@ router.post('/register', async (req, res) => {
         const userExists = await User.findOne({
             email: req.body.email
         });
-        if(userExists) {
+        if (userExists) {
             return res.status(200).send({
                 message: "User already exists",
                 success: false,
@@ -53,20 +54,20 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({
             email: req.body.email
         });
-        if(!user){
+        if (!user) {
             return res.status(200).send({
                 message: "User not found",
                 success: false
             })
         }
-        
-        const isMatch = await bcrypt.compare(req.body.password,user.password);
-        if(!isMatch){
+
+        const isMatch = await bcrypt.compare(req.body.password, user.password);
+        if (!isMatch) {
             return res.status(200).send({
                 message: "Password is incorrect",
                 success: false
             })
-        }else{
+        } else {
             const token = jwt.sign(
                 {
                     id: user._id,
@@ -89,6 +90,30 @@ router.post('/login', async (req, res) => {
             error
         });
     }
-})
+});
+
+router.post("/get-user-info-by-id", authMiddleware, async (req, res) => {
+    try {
+        const user = await User.findOne({ _id: req.body.userId });
+        user.password = undefined;
+        if (!user) {
+            res.status(200).send({
+                message: "User not find",
+                success: false,
+            });
+        } else {
+            res.status(200).send({
+                success: true,
+                data: user,
+            });
+        }
+    } catch (error) {
+        res.status(500).send({
+            message: "Error getting user info",
+            success: false,
+            error,
+        });
+    }
+});
 
 module.exports = router;

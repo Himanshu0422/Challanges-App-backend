@@ -29,6 +29,6 @@ const questionSchema = new mongoose.Schema(
     },
 )
 
-const questionModel = mongoose.model('Question', questionSchema);
+const ContributedQuestionModel = mongoose.model('Contributed-Question', questionSchema);
 
-module.exports = questionModel;
+module.exports = ContributedQuestionModel;
