@@ -81,7 +81,7 @@ router.post('/login', async (req, res) => {
                 message: "Login successful",
                 success: true,
                 data: token
-            })
+            });
         }
     } catch (error) {
         res.status(500).send({

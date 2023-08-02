@@ -53,4 +53,41 @@ router.post('/contibuted-question', async (req, res) => {
     }
 });
 
+router.get('/question', async (req, res) => {
+    try {
+        const data = await Question.find({
+            topic: req.query.topic
+        });
+
+        res.status(200).send({
+            message: 'question fetched successfully',
+            success: true,
+            data: data
+        })
+    } catch (error) {
+        res.status(500).send({
+            message: "Error getting questions",
+            success: false,
+        });
+    }
+});
+
+router.get('/questionbyid', async (req, res) => {
+    try {
+        const data = await Question.find({
+            _id: req.query.questionId
+        })
+        res.status(200).send({
+            message: "Question fetched successfully",
+            success: true,
+            data: data
+        })
+    } catch (error) {
+        res.status(500).send({
+            message: "Error getting question",
+            success: false,
+        });
+    }
+})
+
 module.exports = router;
