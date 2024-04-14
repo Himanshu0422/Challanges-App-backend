@@ -15,6 +15,10 @@ const questionRoute = require('./routes/questionRoute');
 
 app.use('/api/v1', questionRoute);
 
+app.get('/', (req, res) => {
+    res.send("Hlo");
+})
+
 const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Connected to port ${PORT}`);
