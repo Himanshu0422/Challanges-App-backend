@@ -90,4 +90,22 @@ router.get('/questionbyid', async (req, res) => {
     }
 })
 
+router.get('/contributed-question-table', async (req, res) => {
+    try {
+        console.log(1);
+        const data = await ContributedQuestion.find();
+
+        res.status(200).send({
+            message: 'question fetched successfully',
+            success: true,
+            data: data
+        })
+    } catch (error) {
+        res.status(500).send({
+            message: "Error getting questions",
+            success: false,
+        });
+    }
+});
+
 module.exports = router;
